@@ -34,10 +34,10 @@ app.get('/test/companies/:companyname/categories/:categoryname/products', async 
     try {
        
         const products = await fetchProductsFromCompany(authToken, companyname, categoryname, top, minPrice, maxPrice);
-        const sortedProducts = products.sort((a, b) => a.price - b.price);
-        const limitedProducts = sortedProducts.slice(0, Number(top)); 
+        // const sortedProducts = products.sort((a, b) => a.price - b.price);
+        // const limitedProducts = sortedProducts.slice(0, Number(top)); 
 
-        res.json(limitedProducts);
+        res.json(products);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error getting products' });
