@@ -27,6 +27,10 @@ const ProductsTable = () => {
                     maxPrice: maxPrice || 10000,
                 },
             });
+
+            // Log the full response data to debug
+            console.log("Fetched products:", response.data);
+
             setProducts(response.data);
         } catch (err) {
             setError('Failed to fetch products.');
@@ -40,64 +44,62 @@ const ProductsTable = () => {
         fetchProducts();
     };
 
-
-    console.log(products)
     return (
-        <div className="container mx-auto px-4 py-6">
-            <h1 className="text-2xl font-bold mb-4">Filter Products</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-lg font-medium">Category</label>
+        <div style={{width:"100%",display:"flex", flexDirection:"column",alignItems:"center",justifyContent:'center'}} className="container mx-auto px-4 py-6 max-w-4xl flex items-center ">
+            <h1 className="text-3xl font-bold mb-6 text-center">Filter Products</h1>
+            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 mb-6 space-y-4">
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Category</label>
                     <input
                         type="text"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
-                <div>
-                    <label className="block text-lg font-medium">Company</label>
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Company</label>
                     <input
                         type="text"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
-                <div>
-                    <label className="block text-lg font-medium">Min Price</label>
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Min Price</label>
                     <input
                         type="number"
                         value={minPrice}
                         onChange={(e) => setMinPrice(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
-                <div>
-                    <label className="block text-lg font-medium">Max Price</label>
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Max Price</label>
                     <input
                         type="number"
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
-                <div>
-                    <label className="block text-lg font-medium">Top</label>
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Top</label>
                     <input
                         type="number"
                         value={top}
                         onChange={(e) => setTop(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
-                <div>
-                    <label className="block text-lg font-medium">Authorization Token</label>
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Authorization Token</label>
                     <input
                         type="text"
                         value={authToken}
                         onChange={(e) => setAuthToken(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2"
                     />
                 </div>
                 <button
@@ -107,20 +109,35 @@ const ProductsTable = () => {
                     Fetch Products
                 </button>
             </form>
-            {loading && <p className="mt-4 text-center text-lg">Loading...</p>}
-            {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+            {loading && <p className="text-center text-lg font-semibold">Loading...</p>}
+            {error && <p className="text-center text-red-500 font-semibold">{error}</p>}
             {products.length > 0 && (
-                <div className="mt-6">
-                    <h2 className="text-xl font-semibold">Product List</h2>
-                    <ul className="space-y-4 mt-4">
-                        {products.map(product => (
-                            <li key={product.id} className="bg-white shadow-md rounded-lg p-4">
-                                <h3 className="text-lg font-semibold">{product.name}</h3>
-                                <p className="text-gray-700">Price: ${product.price}</p>
-                                <p className="text-gray-500">Category: {product.category}</p>
-                            </li>
-                        ))}
-                    </ul>
+                <div className="overflow-x-auto">
+                    <h2 className="text-2xl font-semibold mb-4 text-center">Product List</h2>
+                    <table className="min-w-full bg-white divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Discount</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Availability</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {products.map((product, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{product.productName}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">${product.price}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{product.rating}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{product.discount}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{product.availability}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>
